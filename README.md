@@ -2,8 +2,8 @@
 
 This is simple [Teonet](https://github.com/teonet-go/teonet) one-page application which get fortune message from [Teonet Fortune](https://github.com/teonet-go/teofortune) microservice using Google Cloud Function.
 
-[![GoDoc](https://godoc.org/github.com/teonet-go/teofortune-spa?status.svg)](https://godoc.org/github.com/teonet-go/teofortune-spa/)
-[![Go Report Card](https://goreportcard.com/badge/github.com/teonet-go/teofortune-spa)](https://goreportcard.com/report/github.com/teonet-go/teofortune-spa)
+[![GoDoc](https://godoc.org/github.com/teonet-go/teofortune-spa-2?status.svg)](https://godoc.org/github.com/teonet-go/teofortune-spa-2/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/teonet-go/teofortune-spa-2)](https://goreportcard.com/report/github.com/teonet-go/teofortune-spa-2)
 
 ## Create default frontend
 

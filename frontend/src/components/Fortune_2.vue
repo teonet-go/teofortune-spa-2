@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
     <h1>{{ name }}</h1>
+    <div class="address">address: {{ address }}</div>
+    <div class="uptime">uptime: {{ uptime }}</div>
     <div class="version">{{ version }}</div>
     <p>
       For a guide and recipes on how to configure / customize this project,
@@ -42,14 +44,18 @@ export default {
   data() {
     return {
       name: null,
+      uptime: null,
       version: null,
+      address: null,
       fortune: null,
       fortune_api: null,
     };
   },
   mounted: function () {
     this.getName();
+    this.getUptime();
     this.getVersion();
+    this.getAddress();
     this.getFortune();
     this.getFortuneApi();
   },
@@ -59,10 +65,20 @@ export default {
         .get("/api/v1/name")
         .then((response) => (this.name = response.data));
     },
+    getUptime() {
+      this.axios
+        .get("/api/v1/uptime")
+        .then((response) => (this.uptime = response.data));
+    },
     getVersion() {
       this.axios
         .get("/api/v1/version")
         .then((response) => (this.version = "ver. " + response.data));
+    },
+    getAddress() {
+      this.axios
+        .get("/api/v1/address")
+        .then((response) => (this.address = response.data));
     },
     getFortune() {
       const startTime = new Date().getTime();
@@ -108,8 +124,12 @@ p.fortune span {
   color: gray;
   font-size: small;
 }
-.version {
+.address {
   margin-top: -20px;
+  margin-left: 6px;
+  font-size: small;
+}
+.uptime,.version {
   margin-left: 6px;
   font-size: small;
 }

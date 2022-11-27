@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/teonet-go/teonet"
 )
@@ -12,12 +14,14 @@ const teofortune = "8agv3IrXQk7INHy5rVlbCxMWVmOOCoQgZBF"
 type Teonet struct {
 	*teonet.Teonet
 	fortune *teonet.APIClient
+	start   time.Time
 }
 
 // Create new Teonet connection and connect to teofortune app
 func newTeonet(appName string) (teo *Teonet, err error) {
 
 	teo = new(Teonet)
+	teo.start = time.Now()
 
 	// Create teonet connection
 	teo.Teonet, err = teonet.New(appName)
@@ -78,4 +82,14 @@ func (teo *Teonet) fortuneHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("can't get fortune, err: " + err.Error()))
 	}
 	w.Write([]byte(fortune))
+}
+
+// uptimeHandler get teonet address
+func (teo *Teonet) uptimeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(fmt.Sprint(time.Since(teo.start))))
+}
+
+// addressHandler get teonet address
+func (teo *Teonet) addressHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(teo.Address()))
 }

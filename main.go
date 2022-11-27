@@ -18,7 +18,7 @@ import (
 const (
 	appShort   = "teofortune-spa-2"
 	appName    = "Teonet fortune single-page application-2"
-	appVersion = "0.0.1"
+	appVersion = "0.0.2"
 
 	appPort = "8080"
 
@@ -59,6 +59,8 @@ func main() {
 	http.Handle("/", frontendFS)
 	http.HandleFunc(apiprefix+"name", nameHandler)
 	http.HandleFunc(apiprefix+"version", versionHandler)
+	http.HandleFunc(apiprefix+"uptime", teo.uptimeHandler)
+	http.HandleFunc(apiprefix+"address", teo.addressHandler)
 	http.HandleFunc(apiprefix+"fortune", teo.fortuneHandler)
 
 	// Start HTTP server
