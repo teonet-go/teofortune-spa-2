@@ -18,7 +18,7 @@ import (
 const (
 	appShort   = "teofortune-spa-2"
 	appName    = "Teonet fortune single-page application-2"
-	appVersion = "0.0.2"
+	appVersion = "0.0.3"
 
 	appPort = "8080"
 

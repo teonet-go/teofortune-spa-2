@@ -11,6 +11,14 @@ export default {
   components: {
     Fortune_2,
   },
+  mounted: function () {
+    // Connect to Teonet proxy WebRTC server
+    this.teoweb.connect(
+      "ws://gt7-2.myteo.net:8081/signal",
+      "teofortune-spa-2",
+      "server-1"
+    );
+  },
 };
 </script>
 

@@ -17,6 +17,11 @@ This is simple [Teonet](https://github.com/teonet-go/teonet) one-page applicatio
     cd frontend
     npm run build
 
+## Add teoweb package
+
+    npm config set registry https://npm.pkg.github.com
+    npm i @teonet-go/teoweb@0.0.18
+
 ## How to use
 
 To run this application local use next commands:

@@ -13,7 +13,7 @@
     </p>
 
     <div v-if="fortune != null">
-      <h3>Fortune function message:</h3>
+      <h3>Fortune message from Google Function:</h3>
       <p class="fortune">
         <pre>{{ fortune }}</pre>
         <span>Spent time {{ fortuneTime }} ms</span><br />
@@ -23,12 +23,22 @@
     </div>
 
     <div v-if="fortune_api != null">
-      <h3>Fortune this application api message:</h3>
+      <h3>Fortune message from this Application RestAPI:</h3>
       <p class="fortune">
         <pre>{{ fortune_api }}</pre>
         <span>Spent time {{ fortune_apiTime }} ms</span><br />
         <br />
         <button type="button" @click="getFortuneApi()">Show next</button>
+      </p>
+    </div>
+
+    <div v-if="fortune_rtc != null">
+      <h3>Fortune message from Teonet Proxy by WebRTC:</h3>
+      <p class="fortune">
+        <pre>{{ fortune_rtc }}</pre>
+        <span>Spent time {{ fortune_rtcTime }} ms</span><br />
+        <br />
+        <button type="button" @click="getFortuneRTC()">Show next</button>
       </p>
     </div>
 
@@ -49,15 +59,31 @@ export default {
       address: null,
       fortune: null,
       fortune_api: null,
+      fortune_rtc: null,
+      rtc_id: 0,
     };
   },
   mounted: function () {
+    let that = this;
     this.getName();
     this.getUptime();
     this.getVersion();
     this.getAddress();
     this.getFortune();
     this.getFortuneApi();
+    this.teoweb.onconnected = (_, dc) => {
+      dc.onopen = that.getFortuneRTC;
+      dc.onmessage = (ev) => {
+        // The ev.data got bytes array, so convert it to string and pare to
+        // gw object. Then base64 decode gw.data to string
+        let enc = new TextDecoder("utf-8");
+        let msg = enc.decode(ev.data);
+        console.log("dc got answer:", msg);
+        let gw = JSON.parse(msg);
+        that.fortune_rtc = atob(gw.data);
+        that.fortune_rtcTime = new Date().getTime() - that.startRtcTime;
+      }
+    }
   },
   methods: {
     getName() {
@@ -99,6 +125,18 @@ export default {
           this.fortune_api = response.data;
           this.fortune_apiTime = new Date().getTime() - startTime; 
         });
+    },
+    getFortuneRTC() {
+      this.startRtcTime = new Date().getTime();
+      this.fortune_rtc = "loading ...";
+      let request = {
+        id: this.rtc_id++,
+        address: "8agv3IrXQk7INHy5rVlbCxMWVmOOCoQgZBF", 
+        command: "forta", 
+        // data: null,
+      }
+      let msg = JSON.stringify(request);
+      this.teoweb.send(msg);
     },
   },
 };
