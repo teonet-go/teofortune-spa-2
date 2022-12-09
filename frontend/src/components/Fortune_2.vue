@@ -78,7 +78,7 @@ export default {
         // gw object. Then base64 decode gw.data to string
         let enc = new TextDecoder("utf-8");
         let msg = enc.decode(ev.data);
-        console.log("dc got answer:", msg);
+        console.debug("dc got answer:", msg);
         let gw = JSON.parse(msg);
         that.fortune_rtc = atob(gw.data);
         that.fortune_rtcTime = new Date().getTime() - that.startRtcTime;
