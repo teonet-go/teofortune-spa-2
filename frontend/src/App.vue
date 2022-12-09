@@ -16,11 +16,11 @@ export default {
     // Get this browser name from local storage
     if (localStorage.teoname) {
       this.teoname = localStorage.teoname;
-      console.log("teoname:", this.teoname);
+      console.debug("teoname:", this.teoname);
     } else {
       this.teoname = uuid.v1();
       localStorage.teoname = this.teoname;
-      console.log("teoname does not exists, new name created:", this.teoname);
+      console.debug("teoname does not exists, new name created:", this.teoname);
     }
 
     // Connect to Teonet proxy WebRTC server
