@@ -3,7 +3,7 @@ import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import teoweb from '@teonet-go/teoweb'
+import teoweb from 'teoweb'
 
 const app = createApp(App)
 app.use(VueAxios, axios)

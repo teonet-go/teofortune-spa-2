@@ -1,12 +1,4 @@
 steps:
-  # - name: node
-  #   args:
-  #     - config 
-  #     - set 
-  #     - registry 
-  #     - https://npm.pkg.github.com
-  #   dir: frontend
-  #   entrypoint: npm
   - name: node
     args:
       - i
