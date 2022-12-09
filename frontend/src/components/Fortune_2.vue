@@ -2,6 +2,7 @@
   <div class="hello">
     <h1>{{ name }}</h1>
     <div class="address">address: {{ address }}</div>
+    <div class="name">teoname: {{ $root.getTeoname() }}</div>
     <div class="uptime">uptime: {{ uptime }}</div>
     <div class="version">{{ version }}</div>
     <p>
@@ -64,13 +65,15 @@ export default {
     };
   },
   mounted: function () {
-    let that = this;
+
     this.getName();
     this.getUptime();
     this.getVersion();
     this.getAddress();
     this.getFortune();
     this.getFortuneApi();
+
+    let that = this;
     this.teoweb.onconnected = (_, dc) => {
       dc.onopen = that.getFortuneRTC;
       dc.onmessage = (ev) => {
@@ -83,7 +86,7 @@ export default {
         that.fortune_rtc = atob(gw.data);
         that.fortune_rtcTime = new Date().getTime() - that.startRtcTime;
       }
-    }
+    };
   },
   methods: {
     getName() {
@@ -167,7 +170,7 @@ p.fortune span {
   margin-left: 6px;
   font-size: small;
 }
-.uptime,.version {
+.uptime,.version,.name {
   margin-left: 6px;
   font-size: small;
 }

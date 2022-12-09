@@ -5,6 +5,7 @@
 
 <script>
 import Fortune_2 from "./components/Fortune_2.vue";
+import { uuid } from "vue-uuid";
 
 export default {
   name: "App",
@@ -12,12 +13,27 @@ export default {
     Fortune_2,
   },
   mounted: function () {
+    // Get this browser name from local storage
+    if (localStorage.teoname) {
+      this.teoname = localStorage.teoname;
+      console.log("teoname:", this.teoname);
+    } else {
+      this.teoname = uuid.v1();
+      localStorage.teoname = this.teoname;
+      console.log("teoname does not exists, new name created:", this.teoname);
+    }
+
     // Connect to Teonet proxy WebRTC server
     this.teoweb.connect(
       "wss://signal.teonet.dev/signal",
-      "teofortune-spa-2",
+      this.teoname,
       "server-1"
     );
+  },
+  methods: {
+    getTeoname: function () {
+      return this.teoname;
+    },
   },
 };
 </script>
