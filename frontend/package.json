@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^1.2.0",
     "core-js": "^3.8.3",
-    "teoweb": "^0.0.21",
+    "teoweb": "^0.0.22",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",
     "vue-uuid": "^3.0.0"
