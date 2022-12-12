@@ -5,6 +5,7 @@
     <div class="name">teoname: {{ $root.getTeoname() }}</div>
     <div class="uptime">uptime: {{ uptime }}</div>
     <div class="version">{{ version }}</div>
+    <div class="clients">clients: {{ clients }}</div>
     <p>
       For a guide and recipes on how to configure / customize this project,
       check out the
@@ -47,6 +48,9 @@
 </template>
 
 <script>
+
+const prefix = "/api/v1/";
+
 export default {
   name: "Fortune_2",
   props: {
@@ -61,6 +65,7 @@ export default {
       fortune: null,
       fortune_api: null,
       fortune_rtc: null,
+      clients: "0",
       rtc_id: 0,
     };
   },
@@ -73,9 +78,12 @@ export default {
     this.getFortune();
     this.getFortuneApi();
 
-    let that = this;
     this.teoweb.onconnected = (_, dc) => {
-      dc.onopen = that.getFortuneRTC;
+      dc.onopen = () => {
+        this.getClients();
+        this.getFortuneRTC();
+        this.subscribeClients();
+      }
       dc.onmessage = (ev) => {
         // The ev.data got bytes array, so convert it to string and pare to
         // gw object. Then base64 decode gw.data to string
@@ -83,30 +91,40 @@ export default {
         let msg = enc.decode(ev.data);
         console.debug("dc got answer:", msg);
         let gw = JSON.parse(msg);
-        that.fortune_rtc = atob(gw.data);
-        that.fortune_rtcTime = new Date().getTime() - that.startRtcTime;
+        // Teonet proxy responce
+        if (gw.address.length) {
+          this.fortune_rtc = atob(gw.data);
+          this.fortune_rtcTime = new Date().getTime() - this.startRtcTime;
+          return;
+        }
+        // WebRTC server responce
+        switch(gw.command) {
+        case "clients":
+          this.clients = atob(gw.data);
+          break;
+        }
       }
     };
   },
   methods: {
     getName() {
       this.axios
-        .get("/api/v1/name")
+        .get(prefix + "name")
         .then((response) => (this.name = response.data));
     },
     getUptime() {
       this.axios
-        .get("/api/v1/uptime")
+        .get(prefix + "uptime")
         .then((response) => (this.uptime = response.data));
     },
     getVersion() {
       this.axios
-        .get("/api/v1/version")
+        .get(prefix + "version")
         .then((response) => (this.version = "ver. " + response.data));
     },
     getAddress() {
       this.axios
-        .get("/api/v1/address")
+        .get(prefix + "address")
         .then((response) => (this.address = response.data));
     },
     getFortune() {
@@ -115,32 +133,55 @@ export default {
       this.axios
         .get("https://fortune-2.teonet.app")
         .then((response) => {
-          this.fortune = response.data; 
-          this.fortuneTime = new Date().getTime() - startTime; 
+          this.fortune = response.data;
+          this.fortuneTime = new Date().getTime() - startTime;
         });
     },
     getFortuneApi() {
       const startTime = new Date().getTime();
       this.fortune_api = "loading ...";
       this.axios
-        .get("/api/v1/fortune")
+        .get(prefix + "fortune")
         .then((response) => {
           this.fortune_api = response.data;
-          this.fortune_apiTime = new Date().getTime() - startTime; 
+          this.fortune_apiTime = new Date().getTime() - startTime;
         });
     },
+    /** Get fortune message from WebRTC proxy server */
     getFortuneRTC() {
       this.startRtcTime = new Date().getTime();
       this.fortune_rtc = "loading ...";
       let request = {
         id: this.rtc_id++,
-        address: "8agv3IrXQk7INHy5rVlbCxMWVmOOCoQgZBF", 
-        command: "forta", 
+        address: "8agv3IrXQk7INHy5rVlbCxMWVmOOCoQgZBF",
+        command: "forta",
         // data: null,
       }
       let msg = JSON.stringify(request);
       this.teoweb.send(msg);
     },
+    /** Get number of clients connected to WebRTC server */
+    getClients() {
+      let request = {
+        id: this.rtc_id++,
+        address: "",
+        command: "clients",
+        // data: null,
+      }
+      let msg = JSON.stringify(request);
+      this.teoweb.send(msg);
+    },
+    /** Subscribe to clients connected to WebRTC server */
+    subscribeClients() {
+      let request = {
+        id: this.rtc_id++,
+        address: "",
+        command: "subscribe",
+        data: btoa("clients")
+      }
+      let msg = JSON.stringify(request);
+      this.teoweb.send(msg);
+    }
   },
 };
 </script>
@@ -170,7 +211,7 @@ p.fortune span {
   margin-left: 6px;
   font-size: small;
 }
-.uptime,.version,.name {
+.uptime,.version,.name,.clients {
   margin-left: 6px;
   font-size: small;
 }
