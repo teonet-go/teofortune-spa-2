@@ -51,6 +51,10 @@
 
 const prefix = "/api/v1/";
 
+const cmdSubscribe = "subscribe";
+const cmdClients = "clients";
+const cmdList = "list";
+
 export default {
   name: "Fortune_2",
   props: {
@@ -80,9 +84,11 @@ export default {
 
     this.teoweb.onconnected = (_, dc) => {
       dc.onopen = () => {
-        this.getClients();
+        this.getCommand(cmdList);
+        this.getCommand(cmdClients);
         this.getFortuneRTC();
-        this.subscribeClients();
+        this.subscribeCommand(cmdList);
+        this.subscribeCommand(cmdClients);
       }
       dc.onmessage = (ev) => {
         // The ev.data got bytes array, so convert it to string and pare to
@@ -99,9 +105,15 @@ export default {
         }
         // WebRTC server responce
         switch(gw.command) {
-        case "clients":
+        case cmdClients:
           this.clients = atob(gw.data);
           break;
+        case cmdList: {
+          let listStr = atob(gw.data);
+          let list = JSON.parse(listStr);
+          console.debug("clients list:", list);
+          break;
+        }
         }
       }
     };
@@ -160,28 +172,25 @@ export default {
       let msg = JSON.stringify(request);
       this.teoweb.send(msg);
     },
-    /** Get number of clients connected to WebRTC server */
-    getClients() {
+    /** Send request with command to WebRTC server */
+    getCommand(cmd, cmdData) {
+      let data = null;
+      if (cmdData) {
+        data = btoa(cmdData);
+      }
       let request = {
         id: this.rtc_id++,
         address: "",
-        command: "clients",
-        // data: null,
+        command: cmd,
+        data: data,
       }
       let msg = JSON.stringify(request);
       this.teoweb.send(msg);
     },
-    /** Subscribe to clients connected to WebRTC server */
-    subscribeClients() {
-      let request = {
-        id: this.rtc_id++,
-        address: "",
-        command: "subscribe",
-        data: btoa("clients")
-      }
-      let msg = JSON.stringify(request);
-      this.teoweb.send(msg);
-    }
+    /** Send subscribe request with command to WebRTC server */
+    subscribeCommand(cmd) {
+      this.getCommand(cmdSubscribe, cmd);
+    },
   },
 };
 </script>
