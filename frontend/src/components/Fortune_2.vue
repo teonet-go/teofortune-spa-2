@@ -6,6 +6,8 @@
     <div class="uptime">uptime: {{ uptime }}</div>
     <div class="version">{{ version }}</div>
     <div class="clients">clients: {{ clients }}</div>
+    <div v-if="online" class="online">online</div>
+    <div v-if="!online" class="offline">offline</div>
     <p>
       For a guide and recipes on how to configure / customize this project,
       check out the
@@ -71,6 +73,7 @@ export default {
       fortune_rtc: null,
       clients: "0",
       rtc_id: 0,
+      online: false,
     };
   },
   mounted: function () {
@@ -83,6 +86,8 @@ export default {
     this.getFortuneApi();
 
     this.teoweb.onconnected = (_, dc) => {
+      console.debug("connected");
+      this.online = true;
       dc.onopen = () => {
         this.getCommand(cmdList);
         this.getCommand(cmdClients);
@@ -116,6 +121,11 @@ export default {
         }
         }
       }
+    };
+
+    this.teoweb.ondisconnected = () => {
+      console.debug("disconnected");
+      this.online = false;
     };
   },
   methods: {
@@ -220,8 +230,14 @@ p.fortune span {
   margin-left: 6px;
   font-size: small;
 }
-.uptime,.version,.name,.clients {
+.uptime,.version,.name,.clients,.online,.offline {
   margin-left: 6px;
   font-size: small;
+}
+.online {
+  color: green;
+}
+.offline {
+  color: red;
 }
 </style>
