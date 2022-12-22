@@ -8,6 +8,7 @@
     <div class="clients">clients: {{ clients }}</div>
     <div v-if="online" class="online">online</div>
     <div v-if="!online" class="offline">offline</div>
+    <button v-if="disconnected" type="button" @click="reconnect()">Reconnect</button>
     <p>
       For a guide and recipes on how to configure / customize this project,
       check out the
@@ -74,6 +75,7 @@ export default {
       clients: "0",
       rtc_id: 0,
       online: false,
+      disconnected: false,
     };
   },
   mounted: function () {
@@ -89,12 +91,18 @@ export default {
       console.debug("connected");
       this.online = true;
       dc.onopen = () => {
+        console.debug("dc open");
         this.getCommand(cmdList);
         this.getCommand(cmdClients);
         this.getFortuneRTC();
         this.subscribeCommand(cmdList);
         this.subscribeCommand(cmdClients);
       }
+      dc.onclose = () => {
+        console.debug("dc close");
+        this.disconnected = true;
+        this.online = false;
+      },
       dc.onmessage = (ev) => {
         // The ev.data got bytes array, so convert it to string and pare to
         // gw object. Then base64 decode gw.data to string
@@ -201,6 +209,11 @@ export default {
     subscribeCommand(cmd) {
       this.getCommand(cmdSubscribe, cmd);
     },
+    /** Reconnect */
+    reconnect() {
+      // this.$router.push('/');
+      window.location.href = './';
+    }
   },
 };
 </script>
