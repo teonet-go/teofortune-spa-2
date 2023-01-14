@@ -26,12 +26,7 @@ This is simple [Teonet](https://github.com/teonet-go/teonet) one-page applicatio
 
 To run this application local use next commands:
 
-    go run .
-
-or (run without server)
-
-    cd frontend
-    npm run serve
+    go run -tags=dev .
 
 By default the teofortune-spa-2 site start at localhost:8080. You can publish
 this site to Google [Cloud Run](https://console.cloud.google.com/run).

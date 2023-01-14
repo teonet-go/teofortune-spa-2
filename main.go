@@ -6,10 +6,8 @@
 package main
 
 import (
-	"embed"
 	"flag"
 	"fmt"
-	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -18,15 +16,12 @@ import (
 const (
 	appShort   = "teofortune-spa-2"
 	appName    = "Teonet fortune single-page application-2"
-	appVersion = "0.0.7"
+	appVersion = "0.0.8"
 
 	appPort = "8080"
 
 	apiprefix = "/api/v1/"
 )
-
-//go:embed frontend/dist
-var frontend embed.FS
 
 func main() {
 
@@ -51,17 +46,13 @@ func main() {
 	}
 
 	// Static part of frontend
-	dist, err := fs.Sub(frontend, "frontend/dist")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	frontendFS := http.FileServer(http.FS(dist))
-	http.Handle("/", frontendFS)
+	frontendFS := http.FileServer(http.FS(getFrontendAssets()))
 	http.HandleFunc(apiprefix+"name", nameHandler)
 	http.HandleFunc(apiprefix+"version", versionHandler)
 	http.HandleFunc(apiprefix+"uptime", teo.uptimeHandler)
 	http.HandleFunc(apiprefix+"address", teo.addressHandler)
 	http.HandleFunc(apiprefix+"fortune", teo.fortuneHandler)
+	http.Handle("/", frontendFS)
 
 	// Start HTTP server
 	log.Printf("start listening for HTTP requests on %s", addr)

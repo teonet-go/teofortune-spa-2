@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>{{ name }}</h1>
     <div class="address">address: {{ address }}</div>
-    <div class="name">teoname: {{ $root.getTeoname() }}</div>
+    <div class="name">teoname: {{ teoname }}</div>
     <div class="uptime">uptime: {{ uptime }}</div>
     <div class="version">{{ version }}</div>
     <div class="clients">clients: {{ clients }}</div>
@@ -51,12 +51,13 @@
 </template>
 
 <script>
+import { uuid } from "vue-uuid";
 
 const prefix = "/api/v1/";
 
-const cmdSubscribe = "subscribe";
 const cmdClients = "clients";
 const cmdList = "list";
+const cmdForta = "forta";
 
 export default {
   name: "Fortune_2",
@@ -80,6 +81,17 @@ export default {
   },
   mounted: function () {
 
+    // Get this browser name from local storage
+    if (localStorage.teoname) {
+      this.teoname = localStorage.teoname;
+      console.debug("teoname:", this.teoname);
+    } else {
+      this.teoname = uuid.v1();
+      localStorage.teoname = this.teoname;
+      console.debug("teoname does not exists, new name created:", this.teoname);
+    }
+
+    // Get HTTP Api
     this.getName();
     this.getUptime();
     this.getVersion();
@@ -87,54 +99,46 @@ export default {
     this.getFortune();
     this.getFortuneApi();
 
-    this.teoweb.onconnected = (_, dc) => {
-      console.debug("connected");
-      this.online = true;
-      dc.onopen = () => {
-        console.debug("dc open");
-        this.getCommand(cmdList);
-        this.getCommand(cmdClients);
-        this.getFortuneRTC();
-        this.subscribeCommand(cmdList);
-        this.subscribeCommand(cmdClients);
+    // Connect to Teonet proxy WebRTC server and get WebRTC Api
+    let that = this;
+    this.teoweb.connect("wss://signal.teonet.dev/signal", this.teoname, "server-1");
+    this.teoweb.onOpen(function () {
+      console.debug("onOpen");
+      that.online = true;
+      that.disconnected = false;
+      that.teoweb.sendCmd(cmdClients);
+      that.teoweb.subscribeCmd(cmdClients);
+      that.teoweb.sendCmd(cmdList);
+      that.teoweb.subscribeCmd(cmdList);
+      that.getFortuneRTC();
+    });
+    this.teoweb.onClose(function (b) {
+      console.debug("onClose");
+      that.online = false;
+      if (b === true) {
+        that.disconnected = true;
       }
-      dc.onclose = () => {
-        console.debug("dc close");
-        this.disconnected = true;
-        this.online = false;
-      },
-      dc.onmessage = (ev) => {
-        // The ev.data got bytes array, so convert it to string and pare to
-        // gw object. Then base64 decode gw.data to string
-        let enc = new TextDecoder("utf-8");
-        let msg = enc.decode(ev.data);
-        console.debug("dc got answer:", msg);
-        let gw = JSON.parse(msg);
-        // Teonet proxy responce
-        if (gw.address.length) {
-          this.fortune_rtc = atob(gw.data);
-          this.fortune_rtcTime = new Date().getTime() - this.startRtcTime;
-          return;
-        }
-        // WebRTC server responce
-        switch(gw.command) {
+    });
+    this.teoweb.addReader(function (gw, data) {
+      console.debug(
+        "execute reader in 'App.vue' with parameters, gw:",
+        gw,
+        "data:",
+        data
+      );
+      switch (gw.command) {
         case cmdClients:
-          this.clients = atob(gw.data);
+          that.clients = data;
           break;
-        case cmdList: {
-          let listStr = atob(gw.data);
-          let list = JSON.parse(listStr);
-          console.debug("clients list:", list);
+        case cmdList:
+          that.list = data;
           break;
-        }
-        }
+        case cmdForta:
+          that.fortune_rtc = data;
+          that.fortune_rtcTime = new Date().getTime() - that.startRtcTime;
+          break;
       }
-    };
-
-    this.teoweb.ondisconnected = () => {
-      console.debug("disconnected");
-      this.online = false;
-    };
+    });
   },
   methods: {
     getName() {
@@ -184,34 +188,14 @@ export default {
       let request = {
         id: this.rtc_id++,
         address: "8agv3IrXQk7INHy5rVlbCxMWVmOOCoQgZBF",
-        command: "forta",
+        command: cmdForta,
         // data: null,
       }
       let msg = JSON.stringify(request);
       this.teoweb.send(msg);
     },
-    /** Send request with command to WebRTC server */
-    getCommand(cmd, cmdData) {
-      let data = null;
-      if (cmdData) {
-        data = btoa(cmdData);
-      }
-      let request = {
-        id: this.rtc_id++,
-        address: "",
-        command: cmd,
-        data: data,
-      }
-      let msg = JSON.stringify(request);
-      this.teoweb.send(msg);
-    },
-    /** Send subscribe request with command to WebRTC server */
-    subscribeCommand(cmd) {
-      this.getCommand(cmdSubscribe, cmd);
-    },
     /** Reconnect */
     reconnect() {
-      // this.$router.push('/');
       window.location.href = './';
     }
   },
