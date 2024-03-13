@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- Logo -->
-    <a href="./">
+    <!-- <a href="./">
       <img alt="Vue logo" src="./assets/logo.png" />
-    </a>
+    </a> -->
     <Fortune_2 msg="Welcome to Teonet Fortune-2 Vue.js App" />
   </div>
 </template>

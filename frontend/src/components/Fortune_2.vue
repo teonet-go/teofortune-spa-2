@@ -8,7 +8,11 @@
     <div class="clients">clients: {{ clients }}</div>
     <div v-if="online" class="online">online</div>
     <div v-if="!online" class="offline">offline</div>
-    <button v-if="disconnected" type="button" @click="reconnect()">Reconnect</button>
+    <button v-if="disconnected" type="button" class="btn btn-warning" @click="reconnect()">Reconnect</button>
+    <p>
+      <!-- An empty line -->
+    </p>
+
     <p>
       For a guide and recipes on how to configure / customize this project,
       check out the
@@ -23,7 +27,7 @@
         <pre>{{ fortune }}</pre>
         <span>Spent time {{ fortuneTime }} ms</span><br />
         <br />
-        <button type="button" @click="getFortune()">Show next</button>
+        <button type="button" class="btn btn-primary" @click="getFortune()">Show next</button>
       </p>
     </div>
 
@@ -33,7 +37,7 @@
         <pre>{{ fortune_api }}</pre>
         <span>Spent time {{ fortune_apiTime }} ms</span><br />
         <br />
-        <button type="button" @click="getFortuneApi()">Show next</button>
+        <button type="button" class="btn btn-primary" @click="getFortuneApi()">Show next</button>
       </p>
     </div>
 
@@ -43,7 +47,7 @@
         <pre>{{ fortune_rtc }}</pre>
         <span>Spent time {{ fortune_rtcTime }} ms</span><br />
         <br />
-        <button type="button" @click="getFortuneRTC()">Show next</button>
+        <button type="button" class="btn btn-primary" @click="getFortuneRTC()">Show next</button>
       </p>
     </div>
 
@@ -223,7 +227,7 @@ p.fortune span {
   font-size: small;
 }
 .address {
-  margin-top: -20px;
+  margin-top: -10px;
   margin-left: 6px;
   font-size: small;
 }
