@@ -228,9 +228,15 @@ p.fortune span {
   color: gray;
   font-size: small;
 }
+p.fortune {
+  margin-top: 1rem;
+}
 .address, .uptime,.version,.name,.clients,.online,.offline {
   margin-left: 6px;
   font-size: small;
+}
+.address{
+  margin-top: 1rem;
 }
 .online {
   color: green;
