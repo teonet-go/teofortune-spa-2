@@ -30,6 +30,7 @@
         <button type="button" class="btn btn-primary" @click="getFortune()">Show next</button>
       </p>
     </div>
+    <hr>
 
     <div v-if="fortune_api != null">
       <h3>Fortune message from this Application RestAPI:</h3>
@@ -40,6 +41,7 @@
         <button type="button" class="btn btn-primary" @click="getFortuneApi()">Show next</button>
       </p>
     </div>
+    <hr>
 
     <div v-if="fortune_rtc != null">
       <h3>Fortune message from Teonet Proxy by WebRTC:</h3>
@@ -226,12 +228,7 @@ p.fortune span {
   color: gray;
   font-size: small;
 }
-.address {
-  margin-top: -10px;
-  margin-left: 6px;
-  font-size: small;
-}
-.uptime,.version,.name,.clients,.online,.offline {
+.address, .uptime,.version,.name,.clients,.online,.offline {
   margin-left: 6px;
   font-size: small;
 }
@@ -241,4 +238,5 @@ p.fortune span {
 .offline {
   color: red;
 }
+hr { margin-top: 50px; color: gray; }
 </style>
