@@ -34,4 +34,8 @@ export default {
 img {
   width: 100px;
 }
+/* Telegram collors */
+.btn-primary, .btn-primary:hover  {
+  background-color: #2AABEE;
+}
 </style>
