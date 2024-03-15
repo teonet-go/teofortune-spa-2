@@ -36,6 +36,6 @@ img {
 }
 /* Telegram collors */
 .btn-primary, .btn-primary:hover  {
-  background-color: #229ED9;
+  background-color: #5288C1;
 }
 </style>
