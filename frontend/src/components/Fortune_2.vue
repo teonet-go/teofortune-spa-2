@@ -52,6 +52,23 @@
         <button type="button" class="btn btn-primary" @click="getFortuneRTC()">Show next</button>
       </p>
     </div>
+    <hr>
+    <div class="text-secondary">
+      Based on <a href="https://github.com/teonet-go#teonet-v5">Teonet</a>:<br>
+      <br>
+      Teonet is designed to create client-server systems and build networks for
+      server applications operating within a microservice architecture. To do
+      this, Teonet creates a network / cloud transport between its members.
+      This transport uses UDP for communication between network peers. UDP
+      packets are encrypted with unique keys. Teonet uses its own UDP-based
+      protocol called Teonet Reliable UDP (TRU) for real-time communication,
+      which allows low latency messages to be sent and protocol reliability
+      features.
+    </div>
+    <hr class="norm">
+    <div class="copyr text-center text-secondary">
+      Teonet © 2024
+    </div>
 
   </div>
 </template>
@@ -244,5 +261,14 @@ p.fortune {
 .offline {
   color: red;
 }
-hr { margin-top: 50px; color: gray; }
+hr { 
+  margin-top: 50px;
+  color: gray; 
+}
+hr.norm {
+  margin-top: 20px;
+}
+.copyr {
+  margin-bottom: 1rem;
+}
 </style>
