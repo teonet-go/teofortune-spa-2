@@ -109,8 +109,13 @@
           // let safe = tg.WebApp.initData;
           tg.WebApp.backgroundColor = '#3d3d3d';
           tg.WebApp.headerColor = '#212121';
-          tg.WebApp.MainButton.hide();
+          tg.WebApp.MainButton.show();
           tg.WebApp.expand();
+
+          tg.WebApp.onEvent('mainButtonClicked', function(){
+            tg.sendData("some string that we need to send"); 
+            //при клике на основную кнопку отправляем данные в строковом виде
+          });
         }
       }
     </script>
