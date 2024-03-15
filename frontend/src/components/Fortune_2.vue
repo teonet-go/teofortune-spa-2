@@ -54,7 +54,8 @@
     </div>
     <hr>
     <div class="text-secondary">
-      Based on <a href="https://github.com/teonet-go#teonet-v5">Teonet</a>:<br>
+      Based on <a href="https://github.com/teonet-go#teonet-v5" target="_blank"
+      rel="noopener">Teonet</a>:<br>
       <br>
       Teonet is designed to create client-server systems and build networks for
       server applications operating within a microservice architecture. To do
