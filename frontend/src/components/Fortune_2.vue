@@ -13,13 +13,17 @@
       <!-- An empty line -->
     </p>
 
+    <hr class="norm">
     <p>
-      For a guide and recipes on how to configure / customize this project,
-      check out the
+      This frontend uses Vue.<br />
+      <br />
+      For a guide and recipes on how to configure and customize this vue 
+      frontend project, check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener"
         >vue-cli documentation</a
       >.
     </p>
+    <hr class="norm">
 
     <div v-if="fortune != null">
       <h3>Fortune message from Google Function:</h3>
@@ -53,9 +57,9 @@
       </p>
     </div>
     <hr>
-    <div class="text-secondary">
+    <div>
       Based on <a href="https://github.com/teonet-go#teonet-v5" target="_blank"
-      rel="noopener">Teonet</a>:<br>
+      rel="noopener">Teonet</a>.<br>
       <br>
       Teonet is designed to create client-server systems and build networks for
       server applications operating within a microservice architecture. To do
