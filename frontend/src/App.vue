@@ -25,7 +25,7 @@ export default {
 #app { }
 /* Telegram collors */
 .btn-primary, .btn-primary:hover  {
-  /* background-color: #5288C1 !important;
-  border-color:  #5288C1 !important; */
+  background-color: #5288C1 !important;
+  border-color:  #5288C1 !important;
 }
 </style>
