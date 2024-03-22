@@ -7,26 +7,41 @@ This is simple [Teonet](https://github.com/teonet-go/teonet) one-page applicatio
 
 ## Create default frontend
 
-    sudo npm i -g @vue/cli
-    vue create frontend
-    cd frontend
-    rm -rf .git
+```shell
+sudo npm i -g @vue/cli
+vue create frontend
+cd frontend
+rm -rf .git
+```
 
 ## Build frontend
 
-    cd frontend
-    npm run build
+```shell
+cd frontend
+npm run build
+```
+
+## Add bootstrap package
+
+```shell
+npm i bootstrap
+```
 
 ## Add teoweb package
 
-    npm config set registry https://npm.pkg.github.com
-    npm i @teonet-go/teoweb@0.0.18
+```shell
+# npm config set registry https://npm.pkg.github.com
+# npm i @teonet-go/teoweb@0.0.18
+npm i teoweb
+```
 
 ## How to use
 
 To run this application local use next commands:
 
-    go run -tags=dev .
+```shell
+go run -tags=dev .
+```
 
 By default the teofortune-spa-2 site start at localhost:8080. You can publish
 this site to Google [Cloud Run](https://console.cloud.google.com/run).
