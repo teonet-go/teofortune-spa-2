@@ -6,14 +6,14 @@
     <div class="uptime">uptime: {{ uptime }}</div>
     <div class="version">{{ version }}</div>
     <div class="clients">clients: {{ clients }}</div>
-    <div v-if="online" class="online">online</div>
-    <div v-if="!online" class="offline">offline</div>
+    <div v-if="online" class="online text-success">online</div>
+    <div v-if="!online" class="offline text-danger">offline</div>
     <button v-if="disconnected" type="button" class="btn btn-warning" @click="reconnect()">Reconnect</button>
     <p>
       <!-- An empty line -->
     </p>
 
-    <hr class="norm">
+    <hr>
     <p>
       This frontend uses Vue.<br />
       <br />
@@ -23,37 +23,34 @@
         >vue-cli documentation</a
       >.
     </p>
-    <hr class="norm">
+    <hr>
 
     <div v-if="fortune != null">
       <h3>Fortune message from Google Function:</h3>
+      <button type="button" class="btn btn-primary" @click="getFortune()">Show next</button>
       <p class="fortune">
         <pre>{{ fortune }}</pre>
         <span>Spent time {{ fortuneTime }} ms</span><br />
-        <br />
-        <button type="button" class="btn btn-primary" @click="getFortune()">Show next</button>
       </p>
     </div>
     <hr>
 
     <div v-if="fortune_api != null">
       <h3>Fortune message from this Application RestAPI:</h3>
+      <button type="button" class="btn btn-primary" @click="getFortuneApi()">Show next</button>
       <p class="fortune">
         <pre>{{ fortune_api }}</pre>
         <span>Spent time {{ fortune_apiTime }} ms</span><br />
-        <br />
-        <button type="button" class="btn btn-primary" @click="getFortuneApi()">Show next</button>
       </p>
     </div>
     <hr>
 
     <div v-if="fortune_rtc != null">
       <h3>Fortune message from Teonet Proxy by WebRTC:</h3>
+      <button type="button" class="btn btn-primary" @click="getFortuneRTC()">Show next</button>
       <p class="fortune">
         <pre>{{ fortune_rtc }}</pre>
         <span>Spent time {{ fortune_rtcTime }} ms</span><br />
-        <br />
-        <button type="button" class="btn btn-primary" @click="getFortuneRTC()">Show next</button>
       </p>
     </div>
     <hr>
@@ -70,7 +67,7 @@
       which allows low latency messages to be sent and protocol reliability
       features.
     </div>
-    <hr class="norm">
+    <hr>
     <div class="copyr text-center text-secondary">
       Teonet © 2024
     </div>
@@ -232,17 +229,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 a {
   color: #42b983;
 }
@@ -260,18 +246,8 @@ p.fortune {
 .address{
   margin-top: 1rem;
 }
-.online {
-  color: green;
-}
-.offline {
-  color: red;
-}
 hr { 
-  margin-top: 50px;
   color: gray; 
-}
-hr.norm {
-  margin-top: 20px;
 }
 .copyr {
   margin-bottom: 1rem;
